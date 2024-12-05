@@ -1,0 +1,63 @@
+-----------------------------------------------------------------------------------الكود الصحيح علي colab-------------------------------------------------------------------------------------
+
+from PIL import Image
+
+# دالة لتشفير الصورة باستخدام عملية XOR
+def encrypt_image(input_image_path, output_image_path, key):
+    try:
+        # فتح الصورة الأصلية
+        image = Image.open(input_image_path)
+        pixels = image.load()  # الحصول على بكسلات الصورة
+
+        # الحصول على أبعاد الصورة
+        width, height = image.size
+
+        # تطبيق XOR على كل بكسل
+        for y in range(height):
+            for x in range(width):
+                r, g, b = pixels[x, y]  # الحصول على قيم البكسل (أحمر، أخضر، أزرق)
+
+                # تطبيق XOR بين قيم الألوان والمفتاح
+                r = (r ^ key) % 256
+                g = (g ^ key) % 256
+                b = (b ^ key) % 256
+
+                # تعيين القيم المشفرة للبكسل
+                pixels[x, y] = (r, g, b)
+
+        # حفظ الصورة المشفرة
+        image.save(output_image_path)
+        print(f"Image encrypted successfully and saved as {output_image_path}")
+    except Exception as e:
+        print(f"Error encrypting image: {e}")
+
+# دالة لفك تشفير الصورة (نفس التشفير باستخدام نفس المفتاح)
+def decrypt_image(input_image_path, output_image_path, key):
+    try:
+        # فك تشفير الصورة يتم بنفس الطريقة (XOR)
+        encrypt_image(input_image_path, output_image_path, key)
+        print(f"Image decrypted successfully and saved as {output_image_path}")
+    except Exception as e:
+        print(f"Error decrypting image: {e}")
+
+# الوظيفة الرئيسية التي يحدد فيها المستخدم المسار والمفتاح
+def main():
+    print("Simple Image Encryption and Decryption Tool")
+
+    # تحديد مسار الصورة من المستخدم بشكل ثابت (تأكد من أن المسار صحيح)
+    input_image_path = r'/content/top-view-roses-flowers.jpg'  # استبدل بالمسار المناسب للصورة
+    output_image_path = r'/content/top-view-roses-flowers.jpg'  # استبدل بالمسار المناسب لحفظ الصورة المشفرة
+    key = 123  # أدخل المفتاح هنا
+    
+    # تحديد العملية (تشفير أو فك تشفير)
+    action = 'encrypt'  # أو 'decrypt' حسب العملية التي تريدها
+
+    if action == 'encrypt':
+        encrypt_image(input_image_path, output_image_path, key)
+    elif action == 'decrypt':
+        decrypt_image(input_image_path, output_image_path, key)
+    else:
+        print("Invalid action. Please type 'encrypt' or 'decrypt'.")
+
+if __name__ == "__main__":
+    main()

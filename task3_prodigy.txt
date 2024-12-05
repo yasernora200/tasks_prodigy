@@ -1,0 +1,39 @@
+import re
+
+def assess_password_strength(password):
+    
+    length = len(password)
+    has_upper = bool(re.search(r'[A-Z]', password))   
+    has_lower = bool(re.search(r'[a-z]', password))   
+    has_digit = bool(re.search(r'[0-9]', password))  
+    has_special = bool(re.search(r'[@#$%^&+=!]', password)) 
+    
+    
+    strength = "weak"
+    if length >= 12 and has_upper and has_lower and has_digit and has_special:
+        strength = "strong"
+    elif length >= 8 and (has_upper or has_lower) and (has_digit or has_special):
+        strength = "medium"
+    
+    
+    feedback = "Hints:\n"
+    
+    if length < 8:
+        feedback += "- Try to make the password longer than 8 characters.\n"
+    if not has_upper:
+        feedback += "- Add some large characters (A-Z).\n"
+    if not has_lower:
+        feedback += "- Add some small characters (a-z).\n"
+    if not has_digit:
+        feedback += "- Add some numbers (0-9).\n"
+    if not has_special:
+        feedback += "- Add some special characters like !, @, #, $.\n"
+    
+    return strength, feedback
+
+
+password = input("Enter a password to Evaluated it: ")
+strength, feedback = assess_password_strength(password)
+
+print(f"Strength the password: {strength}")
+print(feedback)
